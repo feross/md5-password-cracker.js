@@ -1,4 +1,4 @@
-var numWorkers = 8
+var numWorkers = 8 // NOTE: can't set this to be more than 8 without fixing the way numbers are carried
 var workers = []
 var startTime = +new Date
 
@@ -11,16 +11,20 @@ for (var i = 0; i < numWorkers; i++) {
   // Message handler
   worker.addEventListener('message', function (e) {
     switch (e.data.cmd) {
+      case "status":
+        status(e.data.data, e.data.id)
+        break
+
       case "log":
         log(e.data.data, e.data.id)
         break
 
       case "setRate":
-        log(addCommasToInteger(e.data.data) + " passwords/second", e.data.id)
+        status(addCommasToInteger(e.data.data) + " passwords/second (on " + e.data.lastPw + ")", e.data.id)
         break
 
       case "foundPassword":
-        log("FOUND PASSWORD: " + e.data.data, e.data.id)
+        log("FOUND PASSWORD: " + e.data.data)
 
         var totalTime = (+new Date - startTime) / 1000
         log("TOTAL TIME: " + totalTime + " seconds")
@@ -28,6 +32,7 @@ for (var i = 0; i < numWorkers; i++) {
         workers.forEach(function(worker) {
           worker.terminate()
         })
+        log("Terminated all workers.")
         break
 
       default:
@@ -44,7 +49,7 @@ for (var i = 0; i < numWorkers; i++) {
   // Set worker settings
   worker.postMessage({ cmd: "setWorkerId", data: i })
   worker.postMessage({ cmd: "setMaxPassLength", data: 5 })
-  worker.postMessage({ cmd: "setPassToCrack", data: "e2fc714c4727ee9395f324cd2e7f331f" })
+  worker.postMessage({ cmd: "setPassToCrack", data: "f04e21087e486ea5a857ef47fd91100e" })
 
   // Start worker
   worker.postMessage({ cmd: "performCrack", data: {start: i, hop: numWorkers} })
@@ -63,16 +68,31 @@ function addCommasToInteger(x) {
   return x
 }
 
+function status(msg, workerId) {
+  var prefix = workerId != null
+    ? "Worker " + workerId + " status: "
+    : "Main page status: "
+
+  var selector = workerId != null
+    ? "#worker" + workerId
+    : "#main"
+
+  document.querySelector(selector).textContent = prefix + msg
+}
+
 function log(msg, workerId) {
   var prefix = workerId != null
     ? "Worker " + workerId + " says: "
     : "Main page says: "
 
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(document.createTextNode(prefix + msg));
+  fragment.appendChild(document.createElement('br'));
+
   var selector = workerId != null
-    ? "#worker" + workerId
-    : "#log"
+    ? "#worker" + workerId + "log"
+    : "#mainlog"
 
-  document.querySelector(selector).textContent = prefix + msg
+  document.querySelector(selector).appendChild(fragment)
 }
-
 

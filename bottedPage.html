@@ -2,23 +2,49 @@
 <html>
 <head>
   <meta charset="utf-8" />
+  <style>
+    body {
+      font-family: monospace;
+    }
+    .log {
+      border: 1px solid gray;
+      width: 400px;
+      height: 80px;
+      overflow-y: scroll;
+      margin-bottom: 20px;
+    }
+    .status {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-  <div id="worker0"></div>
-  <div id="worker1"></div>
-  <div id="worker2"></div>
-  <div id="worker3"></div>
-  <div id="worker4"></div>
-  <div id="worker5"></div>
-  <div id="worker6"></div>
-  <div id="worker7"></div>
-  <div id="log"></div>
+  <div id="main" class="status"></div>
+  <div id="mainlog" class="log"></div>
+  <div id="worker0" class="status"></div>
+  <div id="worker0log" class="log"></div>
+  <div id="worker1" class="status"></div>
+  <div id="worker1log" class="log"></div>
+  <div id="worker2" class="status"></div>
+  <div id="worker2log" class="log"></div>
+  <div id="worker3" class="status"></div>
+  <div id="worker3log" class="log"></div>
+  <div id="worker4" class="status"></div>
+  <div id="worker4log" class="log"></div>
+  <div id="worker5" class="status"></div>
+  <div id="worker5log" class="log"></div>
+  <div id="worker6" class="status"></div>
+  <div id="worker6log" class="log"></div>
+  <div id="worker7" class="status"></div>
+  <div id="worker7log" class="log"></div>
+  
 
   <script src="jshash-2.2/md5-min.js"></script>
   <script src="chars.js"></script>
 
   <script src="coordinator.js"></script>
-  
+
 </body>
 </html>
