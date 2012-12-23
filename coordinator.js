@@ -1,10 +1,12 @@
 var numWorkers = 8
-var charsPerWorker = charsLength / numWorkers
+var workers = []
+var startTime = +new Date
 
 for (var i = 0; i < numWorkers; i++) {
 
   // Create worker
   var worker = new Worker('worker.js')
+  workers.push(worker)
 
   // Message handler
   worker.addEventListener('message', function (e) {
@@ -12,9 +14,22 @@ for (var i = 0; i < numWorkers; i++) {
       case "log":
         log(e.data.data, e.data.id)
         break
+
       case "setRate":
         log(addCommasToInteger(e.data.data) + " passwords/second", e.data.id)
         break
+
+      case "foundPassword":
+        log("FOUND PASSWORD: " + e.data.data, e.data.id)
+
+        var totalTime = (+new Date - startTime) / 1000
+        log("TOTAL TIME: " + totalTime + " seconds")
+
+        workers.forEach(function(worker) {
+          worker.terminate()
+        })
+        break
+
       default:
         log("Main page doesn't understand command " + e.data.cmd)
         break
@@ -29,15 +44,10 @@ for (var i = 0; i < numWorkers; i++) {
   // Set worker settings
   worker.postMessage({ cmd: "setWorkerId", data: i })
   worker.postMessage({ cmd: "setMaxPassLength", data: 5 })
-  worker.postMessage({ cmd: "setPassToCrack", data: "7ed21143076d0cca420653d4345baa2f" })
-
-  // Split up work among workers
-  var charsStart = i * charsPerWorker
-    , charsEnd = charsStart + charsPerWorker
-    , queue = chars.slice(Math.floor(charsStart), Math.floor(charsEnd))
+  worker.postMessage({ cmd: "setPassToCrack", data: "e2fc714c4727ee9395f324cd2e7f331f" })
 
   // Start worker
-  worker.postMessage({ cmd: "performCrack", data: queue })
+  worker.postMessage({ cmd: "performCrack", data: {start: i, hop: numWorkers} })
 
 }
 
@@ -64,3 +74,5 @@ function log(msg, workerId) {
 
   document.querySelector(selector).textContent = prefix + msg
 }
+
+
