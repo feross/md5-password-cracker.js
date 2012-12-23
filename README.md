@@ -14,7 +14,7 @@ The space of possible passwords is divided so each Worker can work in parallel. 
 
 A typical CPU can get around 50 million hashes per second, so JavaScript is really slowing things down here. The MD5 algorithm I used is [Joseph Meyer's](http://www.myersdaily.org/joseph/javascript/md5-text.html), which is supposed to be the fastest JS implementation, but even so, it's likely the bottleneck here.
 
-Compared to GPUs this is basically worthless.
+I want to explore GPU-based cracking next. Is there some way to hack WebGL in order to crack passwords quickly?
 
 Only tested in Chrome v23.
 
