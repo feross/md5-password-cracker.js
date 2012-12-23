@@ -20,7 +20,7 @@ for (var i = 0; i < numWorkers; i++) {
         break
 
       case "setRate":
-        status(addCommasToInteger(e.data.data) + " passwords/second (on " + e.data.lastPw + ")", e.data.id)
+        status(addCommasToInteger(e.data.data) + " passwords/second", e.data.id)
         break
 
       case "foundPassword":
@@ -49,7 +49,7 @@ for (var i = 0; i < numWorkers; i++) {
   // Set worker settings
   worker.postMessage({ cmd: "setWorkerId", data: i })
   worker.postMessage({ cmd: "setMaxPassLength", data: 5 })
-  worker.postMessage({ cmd: "setPassToCrack", data: "f04e21087e486ea5a857ef47fd91100e" })
+  worker.postMessage({ cmd: "setPassToCrack", data: "9a0e5ecd2ba0505f85f69739c5e03bf3" })
 
   // Start worker
   worker.postMessage({ cmd: "performCrack", data: {start: i, hop: numWorkers} })

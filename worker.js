@@ -1,4 +1,4 @@
-importScripts('jshash-2.2/md5-min.js', 'chars.js')
+importScripts('md5.js', 'chars.js')
 
 // Cracking settings
 var workerId
@@ -32,7 +32,7 @@ function crack(options) {
   while (true) {
     pw = String.fromCharCode.apply(null, view)
 
-    if (hex_md5(pw) == passToCrack) {
+    if (md5(pw) == passToCrack) {
       this.postMessage({ cmd: "foundPassword", data: pw, id: workerId })
       return
     }
@@ -87,7 +87,7 @@ function crack(options) {
     // Timer stuff
     count += 1
     if (count % interval == 0) {
-      this.postMessage({ cmd: "setRate", data: interval / ((new Date - startTime) / 1000), id: workerId, lastPw: pw })
+      this.postMessage({ cmd: "setRate", data: interval / ((new Date - startTime) / 1000), id: workerId })
       count = 0
       startTime = +new Date
     }
