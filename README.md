@@ -1,5 +1,7 @@
 # MD5-Password-Cracker.js
 
+by [Feross Aboukhadijeh](http://feross.org).
+
 This was an experiment to see if using HTML5 Web Workers to parallelize CPU-bound tasks is practical.
 
 ## View the [demo](http://feross.org/hacks/md5-password-cracker.js/).
